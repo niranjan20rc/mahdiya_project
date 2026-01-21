@@ -36,7 +36,6 @@
         border: none;
         cursor: pointer;
         transition: background 0.3s;
-        margin-right: 10px;
     }
 
     button:hover {
@@ -47,14 +46,6 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-    }
-
-    #pdfView {
-        display: none;
-        width: 100%;
-        max-width: 800px;
-        height: 80vh;
-        border: none;
     }
 
     @media (max-width: 480px) {
@@ -70,7 +61,6 @@
         }
         .button-group button {
             margin-bottom: 10px;
-            margin-right: 0;
         }
     }
 </style>
@@ -83,14 +73,8 @@
     <textarea id="textInput" placeholder="Type your text here..."></textarea>
     
     <div class="button-group">
-        <button onclick="viewPDF()">View PDF</button>
         <button onclick="downloadPDF()">Download PDF</button>
     </div>
-</div>
-
-<iframe id="pdfView"></iframe>
-<div id="backBtnContainer" style="display:none; margin-top:10px;">
-    <button onclick="goBack()">Back</button>
 </div>
 
 <!-- jsPDF library -->
@@ -111,7 +95,6 @@
         const margin = 15;
         const lineHeight = 10;
 
-        // Split text into lines that fit page width
         const lines = doc.splitTextToSize(text, pageWidth - 2 * margin);
         let cursorY = margin;
 
@@ -132,32 +115,11 @@
         return fileName ? fileName : "generated";
     }
 
-    function viewPDF() {
-        const doc = createMultiPagePDF();
-        if (doc) {
-            const pdfBlob = doc.output("bloburl"); // multi-page PDF as blob
-            const pdfView = document.getElementById('pdfView');
-            const inputSection = document.getElementById('inputSection');
-            const backBtnContainer = document.getElementById('backBtnContainer');
-
-            pdfView.src = pdfBlob;
-            pdfView.style.display = 'block';
-            inputSection.style.display = 'none';
-            backBtnContainer.style.display = 'block';
-        }
-    }
-
     function downloadPDF() {
         const doc = createMultiPagePDF();
         if (doc) {
             doc.save(getFileName() + ".pdf");
         }
-    }
-
-    function goBack() {
-        document.getElementById('pdfView').style.display = 'none';
-        document.getElementById('inputSection').style.display = 'block';
-        document.getElementById('backBtnContainer').style.display = 'none';
     }
 </script>
 </body>
